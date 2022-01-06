@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>employee page</title>
+    <style type="text/css">
+        .error{
+            color: red;
+        }
+        .imgBtn{
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</h:head>
+<h:body>
+    <h:commandButton value="Add employee" image="add_icon.png" type="button" onclick="PF('add_dlg').show();" styleClass="imgBtn"/>
+
+    <br/>
+
+    <p:dialog header="Add Employee" widgetVar="add_dlg" minHeight="40">
+        <h:form>
+            code: <p:inputText id="code" value="#{employee.empCode}" validator="#{codeValidation.validate}"/>
+            <p:message for="code"/><br/>
+            Name: <p:inputText id="name" value="#{employee.empName}" validator="#{nameValidation.validate}"/><br/><br/>
+            <p:message for="name"/><br/>
+            Address: <p:inputText id="address" value="#{employee.empAddress}" validator="#{addressValidation.validate}"/><br/><br/>
+            <p:message for="address"/><br/>
+            Email: <p:inputText id="email" value="#{employee.empEmail}" validator="#{emailValidation.validate}"/>
+            <p:message for="email"/><br/>
+            <h:commandButton action="#{employeeController.saveEmployee(employee)}" value="Submit" />
+            <h:commandButton onclick="PF('add_dlg').hide();" type="button" value="Cancel" />
+        </h:form>
+    </p:dialog>
+
+    <p:dialog header="Edit Employee" widgetVar="edit_dlg" minHeight="40">
+        <h:form>
+            Name: <p:inputText id="ename" value="#{employeeController.editEmployee.empName}" validator="#{nameValidation.validate}"/><br/><br/>
+            <p:message for="ename"/><br/>
+            Address: <p:inputText id="eaddress" value="#{employeeController.editEmployee.empAddress}" validator="#{addressValidation.validate}"/><br/><br/>
+            <p:message for="eaddress"/><br/>
+            Email: <p:inputText id="eemail" value="#{employeeController.editEmployee.empEmail}" validator="#{emailValidation.validate}"/>
+            <p:message for="eemail"/><br/>
+            <h:commandButton action="#{employeeController.updateEmployee(employeeController.editEmployee)}" value="Update" />
+            <h:commandButton onclick="PF('edit_dlg').hide();" type="button" value="Cancel" />
+        </h:form>
+    </p:dialog>
+
+    <p:dialog header="Edit Employee" widgetVar="success_dlg" minHeight="40">
+        <h:outputText value="Sucssesfully done"/><br/>
+        <h:commandButton onclick="PF('success_dlg').hide();" type="button" value="ok" />
+    </p:dialog>
+
+    <h:form>
+        <p:dataTable value="#{employeeController.showAllEmployee()}" var="emp">
+            <p:column>
+                <f:facet name="header">Employee Code</f:facet>
+                #{emp.empCode}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">Employee Name</f:facet>
+                #{emp.empName}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">Employee Address</f:facet>
+                #{emp.empAddress}
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">Mail Address</f:facet>
+                #{emp.empEmail}
+            </p:column>
+            <p:column>
+                <h:commandButton action="#{employeeController.createEditEmployee(emp)}" value="Edit"/>
+            </p:column>
+            <p:column>
+                <h:commandButton action="#{employeeController.deleteEmployee(emp)}" value="Delete"/>
+            </p:column>
+
+        </p:dataTable>
+    </h:form>
+
+    <h:messages styleClass="error"/>
+
+
+
+
+</h:body>
+</html>
